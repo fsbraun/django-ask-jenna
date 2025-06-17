@@ -16,6 +16,12 @@ class AskJenna {
         el.disabled = true;  // Disable the input field to prevent changes while processing
         this.extendedLLM(el.name).then((result) => {
             console.log(result);
+            // Allow undo: save previous value to the undo stack before overwriting
+            if (typeof el.setRangeText === 'function') {
+                // Use setRangeText to trigger undo stack in most browsers
+                el.focus();
+                el.setRangeText(previousValue, 0, el.value.length, 'end');
+            }
             el.value = this.deconstructJson(result);
             el.disabled = status;
         }).catch(err => {

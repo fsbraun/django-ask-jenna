@@ -1,0 +1,33 @@
+.ask-jenna-wrapper {
+    position: relative;
+    padding-inline-end: 2em;
+    input + button, textarea + button {
+        position: absolute;
+        padding: 2px;
+        top: 5px;
+        inset-inline-end: 0;
+        background-color: transparent;
+        color: var(--body-fg);
+        border: none;
+        svg {
+            width: 1.5em;
+            height: 1.5em;
+            fill: var(--body-fg);
+            vertical-align: middle;
+        }
+        &:hover{
+            cursor: pointer;
+            color: var(--primary);
+            transition: color 0.2s ease-in-out;
+            svg {
+                fill: var(--primary);
+                transition: fill 0.2s ease-in-out;
+
+           }
+        }
+    }
+}
+
+svg.ask-jenna-svgs {
+    display: none;;
+}

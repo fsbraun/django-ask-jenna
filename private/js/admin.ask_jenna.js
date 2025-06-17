@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const llm = new AskJenna(jenna_config, jenna_scripts);
     for (let field of Object.keys(jenna_scripts)) {
         console.log(field);
-        const el = document.querySelector(`input[name="${field}"],textarea[name="${field}"]`);
+        const el = document.querySelector(`input[name="${field}"]:not([disabled]),textarea[name="${field}"]:not([disabled])`);
         if (el) {
             console.log("adding listener");
             el.addEventListener('dblclick', (ev) => {

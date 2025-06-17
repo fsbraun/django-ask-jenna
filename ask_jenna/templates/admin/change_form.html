@@ -4,7 +4,7 @@
 {% block extrahead %}{{ block.super }}
 <script src="{% url 'admin:jsi18n' %}"></script>
 <script src="{% static 'ask_jenna/bundles/bundle.admin.min.js' %}"></script>
-{% ask_jenna_scripts original %}{% ask_jenna_config %}
+{% ask_jenna_scripts "change_view" opts original %}{% ask_jenna_config %}
 {{ media }}
 {% endblock %}
 

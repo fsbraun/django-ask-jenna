@@ -1,6 +1,6 @@
 # django-ask-jenna
 
-A Django app for managing and querying prompts using `ask_jenna.py`.
+A Django app that adds generative AI features to the Django admin and the Django CMS frontend editor. Django app developers can add prompts for their admin views by creating an `ask_jenna.py` file in their app directory, enabling prompt management and querying.
 
 ## Installation
 

@@ -34,6 +34,11 @@ PAGE_PROMPTS = {
 }
 ```
 
+### Built-in prompts
+
+django-ask-jenna comes with prompts typically useful for users of django CMS.
+
+* **Pages**: Auto-generate tile, page title, menu title, and meta description based on the current page content.
 
 ## License
 

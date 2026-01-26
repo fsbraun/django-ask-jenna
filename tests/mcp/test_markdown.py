@@ -147,6 +147,11 @@ test_operations = [
         "target": {"kind": "paragraph", "match": "We offer fast delivery worldwide"},
         "new_markdown": "We offer [fast, carbon-neutral delivery](/delivery) worldwide.",
     },
+    {
+        "op": "insert_after",
+        "target": {"kind": "paragraph", "match": "We offer fast delivery worldwide"},
+        "new_markdown": "**Note:** Carbon offsets included in all shipments.",
+    },
 ]
 
 
@@ -214,6 +219,40 @@ def test_insert_before_adds_content_before_target():
     assert (
         new_html_pos < orig_html_pos
     ), "New content should appear before original text in HTML"
+
+
+def test_insert_after_adds_content_after_target():
+    """Test that insert_after adds new markdown content after the matched target."""
+    index = SemanticIndex(test_content)
+
+    # Get original markdown and HTML
+    original_html = index.to_html()
+    assert "We offer fast delivery worldwide" in original_html
+
+    # Execute insert_after operation
+    operation = test_operations[2]
+    index.execute_operation(operation)
+
+    # Get updated markdown and HTML
+    updated_md = index.to_markdown()
+    updated_html = index.to_html()
+
+    # Original text should still be present in both
+    assert "We offer fast delivery worldwide" in updated_md
+    assert "We offer fast delivery worldwide" in updated_html
+    # New content should be present in both
+    assert "Carbon offsets included" in updated_md
+    assert "Carbon offsets included" in updated_html
+    # New content should appear after original (verify order in markdown)
+    new_pos = updated_md.find("Carbon offsets included")
+    orig_pos = updated_md.find("We offer fast delivery worldwide")
+    assert new_pos > orig_pos, "New content should appear after original text"
+    # New content should also appear after original in HTML
+    new_html_pos = updated_html.find("Carbon offsets included")
+    orig_html_pos = updated_html.find("We offer fast delivery worldwide")
+    assert (
+        new_html_pos > orig_html_pos
+    ), "New content should appear after original text in HTML"
 
 
 def test_find_target_with_matching_kind_and_text():

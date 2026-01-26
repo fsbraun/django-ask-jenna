@@ -1,6 +1,10 @@
 from typing import Any
 
 from bs4 import BeautifulSoup, Comment, NavigableString, PageElement
+from markdown import markdown as markdown_to_html
+from mcp import MCPError
+
+from . import errors
 
 
 class SemanticIndex:
@@ -141,6 +145,7 @@ class SemanticIndex:
     def _add_to_index(self, node: PageElement) -> dict[str, Any]:
         self._index.append(
             {
+                "kind": self._target_dict.get(node.name, None),
                 "tag": node.name,
                 "text": node.get_text(separator=" ", strip=True).replace(chr(173), ""),
                 "md": self._to_markdown(node),
@@ -168,6 +173,168 @@ class SemanticIndex:
         :rtype: float
         """
         return len(self.get_index()) / self._node_count
+
+    def execute_operation(self, operation: dict[str, Any]) -> None:
+        op_name = operation.get("op")
+        if op_name not in self._operations:
+            operations = ", ".join(self._operations)
+            raise ValueError(
+                f"""For each change provide one of the following operations:\n{operations}"""
+            )
+
+        handler = getattr(self, op_name, None)
+        if handler is None:
+            raise ValueError(f"Handler for operation '{op_name}' not found")
+
+        handler(operation)
+
+    def find_target(self, target: dict[str, Any]) -> dict[str, Any]:
+        found = []
+        for node in self.get_index():
+            if node["kind"] == target["kind"] and node["text"] == target["match"]:
+                found.append(node)
+
+        if len(found) == 1:
+            return found[0]
+
+        if len(found) == 0:
+            raise MCPError(
+                code=errors.NO_MATCH,
+                message="No content block matches the specified target.",
+                data={
+                    "target": target,
+                    "possible_reasons": [
+                        "The text does not exist on the placeholder",
+                        "The wording differs slightly",
+                        "The content belongs to a different block type",
+                        "The content is inside a different placeholder",
+                    ],
+                    "suggestions": [
+                        "Use a shorter or more general match string",
+                        "Re-check the placeholder content and try again",
+                        "Target the surrounding section using replace_section",
+                        "Insert new content instead of replacing existing content",
+                    ],
+                },
+            )
+
+        raise MCPError(
+            code=errors.AMBIGUOUS_TARGET,
+            message="Multiple content blocks match the specified target. The operation cannot be applied unambiguously.",
+            data={
+                "target": target,
+                "matches_found": len(found),
+                "candidates": [
+                    {
+                        "kind": match["kind"],
+                        "text": match["text"],
+                    }
+                    for match in found
+                ],
+                "suggestions": [
+                    "Use a longer or more specific match string",
+                    "Choose a different block type if appropriate",
+                ],
+            },
+        )
+
+    def validate_target(self, target: dict[str, Any]):
+        kind = target.get("kind", "")
+        if kind not in self._targets:
+            raise MCPError(
+                code=errors.INVALID_TARGET,
+                message=f"Invalid target kind: {target['kind']}",
+                data={
+                    "target": target,
+                    "possible_reasons": [
+                        "No kind has been specified",
+                        "The kind is not recognized",
+                    ],
+                    "suggestions": [
+                        "Provide a kind that is recognized by the tool.",
+                        "Ensure that kind os one of " + ", ".join(self._targets),
+                    ],
+                },
+            )
+
+    def markdown_to_nodes(self, markdown: str) -> list[PageElement]:
+        html = markdown_to_html(markdown, extensions=["tables"])
+        bs = BeautifulSoup(html, "lxml")
+        return list(bs.body.children)
+
+    def insert_before(self, operation: dict[str, Any]):
+        target = operation.get("target")
+        new_markdown = operation.get("new_markdown")
+        new_nodes = self.markdown_to_nodes(new_markdown)
+        self.validate_target(target)
+
+        node_index = self.find_target(target)
+        node = node_index["node"]
+        for new in new_nodes:
+            node.insert_before(new)
+
+        # Rebuild index to reflect DOM changes
+        self._build_index()
+
+    def insert_after(self, operation: dict[str, Any]):
+        target = operation.get("target")
+        new_markdown = operation.get("new_markdown")
+        new_nodes = self.markdown_to_nodes(new_markdown)
+        self.validate_target(target)
+
+        node_index = self.find_target(target)
+        node = node_index["node"]
+        for new in new_nodes:
+            node.insert_after(new)
+
+        # Rebuild index to reflect DOM changes
+        self._build_index()
+
+    def replace_block(self, operation: dict[str, Any]):
+        target = operation.get("target")
+        new_markdown = operation.get("new_markdown")
+        new_nodes = self.markdown_to_nodes(new_markdown)
+        self.validate_target(target)
+
+        node_index = self.find_target(target)
+        node = node_index["node"]
+        node.replace_with(*new_nodes)
+
+        # Rebuild index to reflect DOM changes
+        self._build_index()
+
+    def insert_at_end(self, operation: dict[str, Any]):
+        new_markdown = operation.get("new_markdown")
+        new_nodes = self.markdown_to_nodes(new_markdown)
+        for new in new_nodes:
+            self._soup.body.append(new)
+
+        # Rebuild index to reflect DOM changes
+        self._build_index()
+
+    _operations = (
+        "insert_before",
+        "insert_after",
+        "replace_block",
+        "insert_at_end",
+    )
+
+    _target_dict = {
+        "p": "paragraph",
+        "h1": "heading",
+        "h2": "heading",
+        "h3": "heading",
+        "h4": "heading",
+        "h5": "heading",
+        "h6": "heading",
+        "ul": "list",
+        "li": "list_item",
+        "blockquote": "blockquote",
+        "code": "code",
+        "pre": "code_block",
+    }
+
+    _targets = set(_target_dict.values())
 
 
 if __name__ == "__main__":

@@ -1,5 +1,4 @@
 from typing import Any
-import requests
 
 from bs4 import BeautifulSoup, Comment, NavigableString, PageElement
 
@@ -15,7 +14,14 @@ class SemanticIndex:
     _sections: list[str] = ["section", "article", "aside"]
 
     _tags: list[str] = (
-        _headings + _paragraphs + _lists + _images + _code + _tables + _sections
+        _headings
+        + _paragraphs
+        + _lists
+        + _links
+        + _images
+        + _code
+        + _tables
+        + _sections
     )
     _ignore: list[str] = [
         "script",
@@ -55,7 +61,7 @@ class SemanticIndex:
             return f'[{node.get_text(separator=" ", strip=True)}]({node.get("href")})'
         return "".join(
             [
-                child.string.strip()
+                str(child)
                 if isinstance(child, NavigableString)
                 else self._to_text(child)
                 for child in node.children
@@ -166,6 +172,7 @@ class SemanticIndex:
 
 if __name__ == "__main__":
     import sys
+    import requests
 
     url = sys.argv[1] if len(sys.argv) > 1 else "https://www.uibk.ac.at/de/"
     html = requests.get(url).text

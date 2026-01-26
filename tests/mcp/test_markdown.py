@@ -96,3 +96,44 @@ def test_code_and_pre_are_rendered():
     assert "pre" in tags
     assert "`snippet`" in md
     assert "```\nline1\nline2\n```" in md
+
+
+def test_sections_articles_aside_are_indexed():
+    html = """
+        <html><body>
+            <section>Section text</section>
+            <article>Article text</article>
+            <aside>Aside text</aside>
+        </body></html>
+        """
+
+    SemanticIndex = _semantic_index()
+    index = SemanticIndex(html)
+    tags = {item["tag"] for item in index.get_index()}
+    md = index.to_markdown()
+
+    assert {"section", "article", "aside"}.issubset(tags)
+    assert "Section text" in md
+    assert "Article text" in md
+    assert "Aside text" in md
+
+
+def test_div_and_ignored_tags_are_not_indexed():
+    html = """
+        <html><body>
+            <p>Keep me</p>
+            <div>Skip me</div>
+            <script>ignored()</script>
+        </body></html>
+        """
+
+    SemanticIndex = _semantic_index()
+    index = SemanticIndex(html)
+    tags = {item["tag"] for item in index.get_index()}
+    md = index.to_markdown()
+
+    assert "div" not in tags
+    assert "script" not in tags
+    assert "Keep me" in md
+    assert "Skip me" not in md
+    assert "ignored()" not in md

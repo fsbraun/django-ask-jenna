@@ -59,3 +59,40 @@ def test_html_comments_are_ignored_in_markdown():
 
     assert "Visible text" in md
     assert "hidden comment" not in md
+
+
+def test_table_is_serialized_as_rows():
+    html = """
+        <html><body>
+            <table>
+                <tr><th>H1</th><th>H2</th></tr>
+                <tr><td>A1</td><td>B1</td></tr>
+            </table>
+        </body></html>
+        """
+
+    SemanticIndex = _semantic_index()
+    index = SemanticIndex(html)
+    md = index.to_markdown()
+
+    assert "H1 | H2" in md
+    assert "A1 | B1" in md
+
+
+def test_code_and_pre_are_rendered():
+    html = """
+        <html><body>
+            <p>Inline <code>snippet</code> text.</p>
+            <pre>line1\nline2</pre>
+        </body></html>
+        """
+
+    SemanticIndex = _semantic_index()
+    index = SemanticIndex(html)
+    md = index.to_markdown()
+    tags = {item["tag"] for item in index.get_index()}
+
+    assert "code" in tags
+    assert "pre" in tags
+    assert "`snippet`" in md
+    assert "```\nline1\nline2\n```" in md

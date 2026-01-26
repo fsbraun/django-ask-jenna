@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const div = el.closest('div');
             if (div) {
                 div.classList.add('ask-jenna-field');
-                const wrapper =document.createElement('div');
+                const wrapper = document.createElement('div');
                 wrapper.classList.add('ask-jenna-wrapper');
                 const btn = document.createElement('button');
                 btn.innerHTML = '<svg><use xlink:href="#icon-ask-jenna"></use></svg>';
@@ -25,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 wrapper.appendChild(btn);
                 div.appendChild(wrapper);
                 btn.addEventListener('click', (ev) => {
-                    console.log("dblClick on ", el.name);
                     llm.fill_input(el);
                 });
             }

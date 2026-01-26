@@ -14,25 +14,23 @@ maintainers = [
 authors = [
   { name = "Divio AG", email = "info@divio.ch" },
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Environment :: Web Environment",
   "Framework :: Django",
-  "Framework :: Django :: 4.2",
-  "Framework :: Django :: 5.0",
-  "Framework :: Django :: 5.1",
+  "Framework :: Django :: 5.2",
+  "Framework :: Django :: 6.0",
   "Framework :: Django CMS",
-  "Framework :: Django CMS :: 3.11",
-  "Framework :: Django CMS :: 4.0",
   "Framework :: Django CMS :: 4.1",
+  "Framework :: Django CMS :: 5.0",
+  "Framework :: Django CMS :: 5.1",
   "Intended Audience :: Developers",
   "License :: OSI Approved :: BSD License",
   "Operating System :: OS Independent",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
@@ -45,11 +43,21 @@ classifiers = [
 dynamic = [ "version" ]
 dependencies = [
   "Django",
+  "beautifulsoup4",
+  "lxml",
+  "markdown",
+  "mcp @ git+https://github.com/modelcontextprotocol/python-sdk@main",
 ]
 urls.Homepage = "https://github.com/fsbraun/django-ask-jenna"
 
+[project.optional-dependencies]
+test = [
+  "pytest",
+  "pytest-django",
+]
+
 [tool.setuptools]
-packages = [ "ask_jenna" ]
+packages = [ "ask_jenna", "cms_mcp" ]
 
 [tool.setuptools.dynamic]
 version = { attr = "ask_jenna.__version__" }
@@ -125,3 +133,13 @@ exclude_lines = [
   "if __name__ == .__main__.:",
 ]
 ignore_errors = true
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "tests.settings"
+python_files = ["test_*.py", "*_test.py"]
+testpaths = ["tests"]
+addopts = "-ra"
+pythonpath = ["."]
+
+[tool.codespell]
+skip = "*.min.js,*.min.js.map,node_modules,build,dist,.git,package.json,package-lock.json"

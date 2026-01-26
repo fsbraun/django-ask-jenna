@@ -1,6 +1,7 @@
 from asgiref.sync import sync_to_async
 
 from mcp.types import (
+    GetPromptResult,
     Prompt,
     PromptMessage,
     TextContent,
@@ -33,10 +34,9 @@ def _load_prompt(name: str) -> MCPPrompt:
 
 
 @server.get_prompt()
-async def get_prompt(name: str) -> Prompt:
+async def get_prompt(name: str) -> GetPromptResult:
     prompt = await _load_prompt(name)
-    return Prompt(
-        name=prompt.name,
+    return GetPromptResult(
         description=prompt.description,
         messages=[
             PromptMessage(

@@ -8,13 +8,13 @@ from mcp.types import PromptMessage, TextContent
 @pytest.mark.asyncio
 @pytest.mark.django_db(transaction=True)
 async def test_list_prompts_returns_only_enabled_entries():
-    MCPPrompt.objects.create(
+    await MCPPrompt.objects.acreate(
         name="enabled_prompt",
         description="Enabled description",
         content="Enabled content",
         enabled=True,
     )
-    MCPPrompt.objects.create(
+    await MCPPrompt.objects.acreate(
         name="disabled_prompt",
         description="Disabled description",
         content="Disabled content",
@@ -30,7 +30,7 @@ async def test_list_prompts_returns_only_enabled_entries():
 @pytest.mark.asyncio
 @pytest.mark.django_db(transaction=True)
 async def test_get_prompt_returns_prompt_message():
-    prompt = MCPPrompt.objects.create(
+    prompt = await MCPPrompt.objects.acreate(
         name="welcome",
         description="Welcome prompt",
         content="Hello from the prompt",
@@ -39,7 +39,6 @@ async def test_get_prompt_returns_prompt_message():
 
     result = await get_prompt(prompt.name)
 
-    assert result.name == prompt.name
     assert result.description == prompt.description
     assert len(result.messages) == 1
 

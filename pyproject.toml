@@ -12,7 +12,7 @@ maintainers = [
   { name = "Django CMS Association and contributors", email = "info@django-cms.org" },
 ]
 authors = [
-  { name = "Divio AG", email = "info@divio.ch" },
+  { name = "Django CMS Association", email = "info@django-cms.org" },
 ]
 requires-python = ">=3.10"
 
@@ -43,10 +43,12 @@ classifiers = [
 dynamic = [ "version" ]
 dependencies = [
   "Django",
+  "django-cms>=4.1",
   "beautifulsoup4",
   "lxml",
   "markdown",
   "mcp @ git+https://github.com/modelcontextprotocol/python-sdk@main",
+  "setuptools",
 ]
 urls.Homepage = "https://github.com/fsbraun/django-ask-jenna"
 
@@ -54,6 +56,7 @@ urls.Homepage = "https://github.com/fsbraun/django-ask-jenna"
 test = [
   "pytest",
   "pytest-django",
+  "pytest-asyncio>=0.23; python_version >= '3.10'",
 ]
 
 [tool.setuptools]

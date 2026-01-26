@@ -6,9 +6,9 @@ import pytest
 
 
 def _semantic_index():
-  if "requests" not in sys.modules:
-    sys.modules["requests"] = types.SimpleNamespace(get=lambda url: None)
-  return importlib.import_module("cms_mcp.markdown").SemanticIndex
+    if "requests" not in sys.modules:
+        sys.modules["requests"] = types.SimpleNamespace(get=lambda url: None)
+    return importlib.import_module("cms_mcp.markdown").SemanticIndex
 
 
 def test_to_markdown_captures_supported_tags():

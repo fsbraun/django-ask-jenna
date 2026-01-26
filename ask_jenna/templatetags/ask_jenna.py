@@ -10,9 +10,10 @@ register = template.Library()
 
 @register.simple_tag
 def ask_jenna_scripts(view: str, opts: models.options.Options, instance: Optional[models.Model]) -> str:
-    # Replace this with actual logic as needed
-    return json_script(prompts.get(view, opts, instance), "ask_jenna_scripts")
-
+    if view and opts:
+        # Replace this with actual logic as needed
+        return json_script(prompts.get(view, opts, instance), "ask_jenna_scripts")
+    return ""
 
 @register.simple_tag
 def ask_jenna_config() -> str:

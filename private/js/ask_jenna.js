@@ -50,14 +50,16 @@ class AskJenna {
             const response = await fetch(this.prompts[name].dynamic_content);
             const div = document.createElement('div');
             div.innerHTML = await response.text();
-            const nodeToRemove = div.querySelector('div#cms-top');
-            if (nodeToRemove) {
-                nodeToRemove.remove();
+            const nodeToRemove = div.querySelectorAll('div#cms-top, #djDebug');
+            for(const node of nodeToRemove) {
+                node.remove();
             }
             div.querySelectorAll('meta, style, script, template, nav').forEach(node => node.remove());
             const content = this.htmlToMDContent(div);
+            console.log(`Here is HTML content: ${content}\n\n${this.prompts[name].prompt}`);
             return LLM(`Here is HTML content: ${content}\n\n${this.prompts[name].prompt}`, this.options);
         }
+        console.log(this.prompts[name].prompt);
         return LLM(this.prompts[name].prompt, this.options);
     }
 

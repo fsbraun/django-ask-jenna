@@ -3,6 +3,7 @@ import requests
 
 DJANGO_MCP_URL = "http://localhost:8000/mcp/"
 
+
 def main():
     for line in sys.stdin:
         line = line.strip()
@@ -13,7 +14,10 @@ def main():
             response = requests.post(
                 DJANGO_MCP_URL,
                 data=line,
-                headers={"Content-Type": "application/json", "Accept": "application/json,text/event-stream"},
+                headers={
+                    "Content-Type": "application/json",
+                    "Accept": "application/json,text/event-stream",
+                },
                 timeout=30,
             )
         except Exception as e:
@@ -28,6 +32,7 @@ def main():
             sys.stdout.write(response.text + "\n")
             sys.stdout.flush()
         # notifications → no output
+
 
 if __name__ == "__main__":
     main()

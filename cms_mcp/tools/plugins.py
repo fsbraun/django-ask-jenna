@@ -4,10 +4,10 @@ CMS Plugins tool handlers.
 Provides functionality for listing, creating, and managing CMS plugins.
 """
 
-from typing import Dict, Any
+from typing import Any
 
 
-def handle_tool(tool_name: str, params: Dict[str, Any], request) -> Dict[str, Any]:
+def handle_tool(tool_name: str, params: dict[str, Any], request) -> dict[str, Any]:
     """
     Route tool calls to the appropriate handler function.
 
@@ -27,7 +27,7 @@ def handle_tool(tool_name: str, params: Dict[str, Any], request) -> Dict[str, An
         raise ValueError(f"Unknown tool: {tool_name}")
 
 
-def list_plugins(params: Dict[str, Any], request) -> Dict[str, Any]:
+def list_plugins(params: dict[str, Any], request) -> dict[str, Any]:
     """
     List plugins in a placeholder or all plugins.
 
@@ -68,7 +68,7 @@ def list_plugins(params: Dict[str, Any], request) -> Dict[str, Any]:
         raise Exception(f"Error listing plugins: {str(e)}")
 
 
-def create_plugin(params: Dict[str, Any], request) -> Dict[str, Any]:
+def create_plugin(params: dict[str, Any], request) -> dict[str, Any]:
     """
     Create a new CMS plugin.
 
@@ -119,7 +119,7 @@ def create_plugin(params: Dict[str, Any], request) -> Dict[str, Any]:
         raise Exception(f"Error creating plugin: {str(e)}")
 
 
-def get_all_plugins(request) -> Dict[str, Any]:
+def get_all_plugins(request) -> dict[str, Any]:
     """
     Get all plugins as a resource.
 

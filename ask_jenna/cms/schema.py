@@ -1,9 +1,9 @@
-import json
 from django import forms
+
 
 def django_form_to_json_schema(form):
     """
-    Wandelt ein Django-Formular (Form-Instanz oder Klasse) in ein JSON Schema um.
+    Turn django form (instance or class) into a JSON schema
     """
     if isinstance(form, type):
         form_instance = form()
@@ -51,9 +51,10 @@ def django_form_to_json_schema(form):
         "type": "object",
         "properties": properties,
         "required": required,
-        "title": form_instance.__class__.__name__
+        "title": form_instance.__class__.__name__,
     }
     return schema
+
 
 # Beispiel:
 # from .forms import MyForm

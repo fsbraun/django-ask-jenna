@@ -12,7 +12,9 @@ def test_token_auto_prefix_and_length(db):
     user = get_user_model().objects.create_user(
         username="tokenuser", email="token@example.com", password="pw12345"
     )
-    token = MCPToken.objects.create(user=user, expires_at=timezone.now() + timedelta(days=1))
+    token = MCPToken.objects.create(
+        user=user, expires_at=timezone.now() + timedelta(days=1)
+    )
     assert token.key.startswith(PREFIX)
     assert len(token.key) > len(PREFIX)
     assert token.revoked is False
@@ -22,8 +24,12 @@ def test_token_unique_generation(db):
     user = get_user_model().objects.create_user(
         username="tokenuser2", email="token2@example.com", password="pw12345"
     )
-    token1 = MCPToken.objects.create(user=user, expires_at=timezone.now() + timedelta(days=1))
-    token2 = MCPToken.objects.create(user=user, expires_at=timezone.now() + timedelta(days=2))
+    token1 = MCPToken.objects.create(
+        user=user, expires_at=timezone.now() + timedelta(days=1)
+    )
+    token2 = MCPToken.objects.create(
+        user=user, expires_at=timezone.now() + timedelta(days=2)
+    )
     assert token1.key != token2.key
 
 
@@ -45,8 +51,12 @@ def test_admin_bulk_revoke_marks_tokens_revoked(db):
     user = get_user_model().objects.create_user(
         username="tokenuser4", email="token4@example.com", password="pw12345"
     )
-    token1 = MCPToken.objects.create(user=user, expires_at=timezone.now() + timedelta(days=1))
-    token2 = MCPToken.objects.create(user=user, expires_at=timezone.now() + timedelta(days=1))
+    token1 = MCPToken.objects.create(
+        user=user, expires_at=timezone.now() + timedelta(days=1)
+    )
+    token2 = MCPToken.objects.create(
+        user=user, expires_at=timezone.now() + timedelta(days=1)
+    )
 
     admin = MCPTokenAdmin(MCPToken, AdminSite())
     qs = MCPToken.objects.filter(pk__in=[token1.pk, token2.pk])

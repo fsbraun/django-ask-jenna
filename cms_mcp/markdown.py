@@ -14,8 +14,20 @@ class SemanticIndex:
     _tables: list[str] = ["table"]
     _sections: list[str] = ["section", "article", "aside"]
 
-    _tags: list[str] = _headings + _paragraphs + _lists + _images + _code + _tables + _sections
-    _ignore: list[str] = ["script", "style", "nav", "header", "footer", "head", "button", "form", "template"]
+    _tags: list[str] = (
+        _headings + _paragraphs + _lists + _images + _code + _tables + _sections
+    )
+    _ignore: list[str] = [
+        "script",
+        "style",
+        "nav",
+        "header",
+        "footer",
+        "head",
+        "button",
+        "form",
+        "template",
+    ]
 
     def __init__(self, html: str):
         self._html: str = html
@@ -26,6 +38,7 @@ class SemanticIndex:
     def _build_index(self):
         self._index = []
         self._node_count = 0
+
         def _process_node(node: PageElement):
             self._node_count += 1
             if node.name in self._tags:
@@ -37,21 +50,34 @@ class SemanticIndex:
 
         _process_node(self._soup)
 
-
     def _to_text(self, node: PageElement) -> str:
         if node.name == "a" and node.get("href", "#") != "#":
             return f'[{node.get_text(separator=" ", strip=True)}]({node.get("href")})'
-        return "".join([child.string.strip() if isinstance(child, NavigableString) else self._to_text(child) for child in node.children])
+        return "".join(
+            [
+                child.string.strip()
+                if isinstance(child, NavigableString)
+                else self._to_text(child)
+                for child in node.children
+            ]
+        )
 
     def _to_markdown(self, node: PageElement) -> str:
-
         if isinstance(node, Comment):
             return ""
 
-        text = self._to_text(node) if node.name != "a" else node.get_text(separator=" ", strip=True)
-        text = text.replace(chr(173), '')  # Remove soft hyphens
+        text = (
+            self._to_text(node)
+            if node.name != "a"
+            else node.get_text(separator=" ", strip=True)
+        )
+        text = text.replace(chr(173), "")  # Remove soft hyphens
         if node.name in self._headings:
-            level = int(node.name[1]) if len(node.name) == 2 and node.name[1].isdigit() else 1
+            level = (
+                int(node.name[1])
+                if len(node.name) == 2 and node.name[1].isdigit()
+                else 1
+            )
             prefix = "#" * max(1, min(level, 6))
             return f"{prefix} {text}\n"
 
@@ -59,7 +85,6 @@ class SemanticIndex:
             return "> " + text + "\n"
 
         if node.name == "p":
-
             return text + "\n\n"
 
         if node.name in ("ul", "ol"):
@@ -94,7 +119,10 @@ class SemanticIndex:
         if node.name == "table":
             rows = []
             for tr in node.find_all("tr", recursive=False):
-                cells = [c.get_text(separator=" ", strip=True) for c in tr.find_all(["th", "td"], recursive=False)]
+                cells = [
+                    c.get_text(separator=" ", strip=True)
+                    for c in tr.find_all(["th", "td"], recursive=False)
+                ]
                 if cells:
                     rows.append(" | ".join(cells))
             return "\n".join(rows)
@@ -105,12 +133,14 @@ class SemanticIndex:
         return text
 
     def _add_to_index(self, node: PageElement) -> dict[str, Any]:
-        self._index.append({
-            "tag": node.name,
-            "text": node.get_text(separator=" ",strip=True).replace(chr(173), ""),
-            "md": self._to_markdown(node),
-            "node": node,
-        })
+        self._index.append(
+            {
+                "tag": node.name,
+                "text": node.get_text(separator=" ", strip=True).replace(chr(173), ""),
+                "md": self._to_markdown(node),
+                "node": node,
+            }
+        )
 
     def get_index(self) -> list[dict[str, Any]]:
         if self._index is None:
@@ -134,11 +164,9 @@ class SemanticIndex:
         return len(self.get_index()) / self._node_count
 
 
-
-
-import sys
-
 if __name__ == "__main__":
+    import sys
+
     url = sys.argv[1] if len(sys.argv) > 1 else "https://www.uibk.ac.at/de/"
     html = requests.get(url).text
     index = SemanticIndex(html)

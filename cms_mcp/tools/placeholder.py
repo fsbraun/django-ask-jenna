@@ -4,10 +4,10 @@ CMS Placeholder tool handlers.
 Provides functionality for listing and managing CMS placeholders.
 """
 
-from typing import Dict, Any
+from typing import Any
 
 
-def handle_tool(tool_name: str, params: Dict[str, Any], request) -> Dict[str, Any]:
+def handle_tool(tool_name: str, params: dict[str, Any], request) -> dict[str, Any]:
     """
     Route tool calls to the appropriate handler function.
 
@@ -25,7 +25,7 @@ def handle_tool(tool_name: str, params: Dict[str, Any], request) -> Dict[str, An
         raise ValueError(f"Unknown tool: {tool_name}")
 
 
-def list_placeholders(params: Dict[str, Any], request) -> Dict[str, Any]:
+def list_placeholders(params: dict[str, Any], request) -> dict[str, Any]:
     """
     List placeholders for a page or all placeholders.
 

@@ -4,10 +4,10 @@ CMS Media tool handlers.
 Provides functionality for listing and managing media files (Filer integration).
 """
 
-from typing import Dict, Any
+from typing import Any
 
 
-def handle_tool(tool_name: str, params: Dict[str, Any], request) -> Dict[str, Any]:
+def handle_tool(tool_name: str, params: dict[str, Any], request) -> dict[str, Any]:
     """
     Route tool calls to the appropriate handler function.
 
@@ -27,7 +27,7 @@ def handle_tool(tool_name: str, params: Dict[str, Any], request) -> Dict[str, An
         raise ValueError(f"Unknown tool: {tool_name}")
 
 
-def list_media(params: Dict[str, Any], request) -> Dict[str, Any]:
+def list_media(params: dict[str, Any], request) -> dict[str, Any]:
     """
     List media files from Filer.
 
@@ -94,7 +94,7 @@ def list_media(params: Dict[str, Any], request) -> Dict[str, Any]:
         raise Exception(f"Error listing media: {str(e)}")
 
 
-def upload_media(params: Dict[str, Any], request) -> Dict[str, Any]:
+def upload_media(params: dict[str, Any], request) -> dict[str, Any]:
     """
     Upload a media file to Filer.
 
@@ -167,7 +167,7 @@ def upload_media(params: Dict[str, Any], request) -> Dict[str, Any]:
         raise Exception(f"Error uploading media: {str(e)}")
 
 
-def get_all_media(request) -> Dict[str, Any]:
+def get_all_media(request) -> dict[str, Any]:
     """
     Get all media files as a resource.
 

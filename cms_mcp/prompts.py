@@ -12,11 +12,7 @@ from .models import MCPPrompt
 
 @sync_to_async
 def _load_prompts() -> list[MCPPrompt]:
-    return list(
-        MCPPrompt.objects
-        .filter(enabled=True)
-        .only("name", "description")
-    )
+    return list(MCPPrompt.objects.filter(enabled=True).only("name", "description"))
 
 
 @server.list_prompts()
@@ -26,31 +22,29 @@ async def list_prompts() -> list[Prompt]:
         Prompt(
             name=row.name,
             description=row.description,
-        ) for row in rows]
+        )
+        for row in rows
+    ]
 
 
 @sync_to_async
 def _load_prompt(name: str) -> MCPPrompt:
-    return (
-        MCPPrompt.objects
-        .filter(name=name, enabled=True)
-        .first()
-    )
+    return MCPPrompt.objects.filter(name=name, enabled=True).first()
 
 
 @server.get_prompt()
 async def get_prompt(name: str) -> Prompt:
     prompt = await _load_prompt(name)
     return Prompt(
-            name=prompt.name,
-            description=prompt.description,
-            messages=[
-                PromptMessage(
-                    role="user",
-                    content=TextContent(
-                        type="text",
-                        text=prompt.content,
-                    ),
-                )
-            ]
-        )
+        name=prompt.name,
+        description=prompt.description,
+        messages=[
+            PromptMessage(
+                role="user",
+                content=TextContent(
+                    type="text",
+                    text=prompt.content,
+                ),
+            )
+        ],
+    )

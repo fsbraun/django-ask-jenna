@@ -5,10 +5,8 @@ Provides decorators and middleware for securing MCP endpoints.
 """
 
 import inspect
-import json
 from functools import wraps
 
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
 
@@ -22,6 +20,7 @@ def mcp_auth_required(view_func):
     """
 
     if inspect.iscoroutinefunction(view_func):
+
         @wraps(view_func)
         async def async_wrapper(request, *args, **kwargs):
             api_key = request.headers.get("X-MCP-API-Key")

@@ -7,14 +7,12 @@ Run with: uvicorn asgi:application --reload
 
 import os
 import django
+from django.core.asgi import get_asgi_application
+
+from cms_mcp.asgi import app as mcp_app
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ask_jenna.settings")
 django.setup()
-
-from django.core.asgi import get_asgi_application
-
-# Import after Django setup
-from cms_mcp.asgi import app as mcp_app
 
 django_app = get_asgi_application()
 

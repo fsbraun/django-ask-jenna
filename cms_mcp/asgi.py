@@ -6,7 +6,6 @@ streamable HTTP transport, session management, and all protocol support.
 """
 
 import logging
-from mcp.server.models import InitializationOptions
 from mcp.server.transport_security import TransportSecuritySettings
 
 from .mcp_handlers import server
@@ -52,18 +51,18 @@ def get_mcp_application():
 
     # Build the streamable HTTP ASGI app with full protocol support
     mcp_app = server.streamable_http_app(
-        streamable_http_path="/mcp/",      # Path where MCP protocol is served
-        json_response=True,                # Use SSE streaming (True for JSON POST/response only)
-        stateless_http=True,               # Stateful sessions (True for stateless init)
-        event_store=None,                  # Optional: EventStore for event resumability
-        retry_interval=None,               # Optional: SSE retry interval in ms
+        streamable_http_path="/mcp/",  # Path where MCP protocol is served
+        json_response=True,  # Use SSE streaming (True for JSON POST/response only)
+        stateless_http=True,  # Stateful sessions (True for stateless init)
+        event_store=None,  # Optional: EventStore for event resumability
+        retry_interval=None,  # Optional: SSE retry interval in ms
         transport_security=transport_security,
         host="127.0.0.1",
-        auth=None,                         # Optional: AuthSettings for OAuth/bearer tokens
-        token_verifier=None,               # Optional: TokenVerifier for auth
-        auth_server_provider=None,         # Optional: OAuth server provider
-        custom_starlette_routes=None,      # Optional: Additional routes
-        debug=True,                        # Enable debug logging
+        auth=None,  # Optional: AuthSettings for OAuth/bearer tokens
+        token_verifier=None,  # Optional: TokenVerifier for auth
+        auth_server_provider=None,  # Optional: OAuth server provider
+        custom_starlette_routes=None,  # Optional: Additional routes
+        debug=True,  # Enable debug logging
     )
 
     logger.info("MCP Server ASGI app configured:")
@@ -80,8 +79,13 @@ mcp_app = get_mcp_application()
 
 def rounte_mcp(func):
     async def wrapper(scope, receive, send):
-        if scope['type'] == 'http' and scope.get('path') == '/mcp/' or scope['type'] == 'lifespan':
+        if (
+            scope["type"] == "http"
+            and scope.get("path") == "/mcp/"
+            or scope["type"] == "lifespan"
+        ):
             return await mcp_app(scope, receive, send)
         # All other requests go to Django
         return await func(scope, receive, send)
+
     return wrapper

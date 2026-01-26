@@ -15,7 +15,7 @@ repos:
         args: ["--py310-plus"]
 
   - repo: https://github.com/adamchainz/django-upgrade
-    rev: '1.4.0'
+    rev: '1.29.1'
     hooks:
       - id: django-upgrade
         args: [--target-version, "5.2"]
@@ -32,11 +32,6 @@ repos:
       - id: debug-statements
       - id: mixed-line-ending
       - id: trailing-whitespace
-
-  - repo: https://github.com/codespell-project/codespell
-    rev: v2.1.0
-    hooks:
-      - id: codespell
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.1.15

@@ -42,18 +42,18 @@ class MCPTokenAdmin(admin.ModelAdmin):
                 readonly.append("revoked")
         return readonly
 
+    @admin.display(
+        description="Active",
+        boolean=True,
+    )
     def is_active(self, obj):  # pragma: no cover - simple passthrough
         return obj.is_active
 
-    is_active.boolean = True
-    is_active.short_description = "Active"
-
+    @admin.action(description="Revoke selected tokens")
     def revoke_tokens(
         self, request, queryset
     ):  # pragma: no cover - trivial bulk update
         queryset.update(revoked=True)
-
-    revoke_tokens.short_description = "Revoke selected tokens"
 
 
 @admin.register(MCPResource)
@@ -75,14 +75,13 @@ class MCPResourceAdmin(admin.ModelAdmin):
             )
         return super().formfield_for_dbfield(db_field, request, **kwargs)
 
+    @admin.action(description=_("Enable selected resources"))
     def enable_selected(self, request, queryset):  # pragma: no cover
         queryset.update(enabled=True)
 
+    @admin.action(description=_("Disable selected resources"))
     def disable_selected(self, request, queryset):  # pragma: no cover
         queryset.update(enabled=False)
-
-    enable_selected.short_description = _("Enable selected resources")
-    disable_selected.short_description = _("Disable selected resources")
 
 
 @admin.register(MCPPrompt)
@@ -104,11 +103,10 @@ class MCPPromptAdmin(admin.ModelAdmin):
             )
         return super().formfield_for_dbfield(db_field, request, **kwargs)
 
+    @admin.action(description=_("Enable selected prompts"))
     def enable_selected(self, request, queryset):  # pragma: no cover
         queryset.update(enabled=True)
 
+    @admin.action(description=_("Disable selected prompts"))
     def disable_selected(self, request, queryset):  # pragma: no cover
         queryset.update(enabled=False)
-
-    enable_selected.short_description = _("Enable selected prompts")
-    disable_selected.short_description = _("Disable selected prompts")

@@ -4,10 +4,10 @@ CMS Pages tool handlers.
 Provides functionality for listing, creating, and managing CMS pages.
 """
 
-from typing import Dict, Any
+from typing import Any
 
 
-def handle_tool(tool_name: str, params: Dict[str, Any], request) -> Dict[str, Any]:
+def handle_tool(tool_name: str, params: dict[str, Any], request) -> dict[str, Any]:
     """
     Route tool calls to the appropriate handler function.
 
@@ -29,7 +29,7 @@ def handle_tool(tool_name: str, params: Dict[str, Any], request) -> Dict[str, An
         raise ValueError(f"Unknown tool: {tool_name}")
 
 
-def list_pages(params: Dict[str, Any], request) -> Dict[str, Any]:
+def list_pages(params: dict[str, Any], request) -> dict[str, Any]:
     """
     List all CMS pages.
 
@@ -72,7 +72,7 @@ def list_pages(params: Dict[str, Any], request) -> Dict[str, Any]:
         raise Exception(f"Error listing pages: {str(e)}")
 
 
-def get_page(params: Dict[str, Any], request) -> Dict[str, Any]:
+def get_page(params: dict[str, Any], request) -> dict[str, Any]:
     """
     Get details of a specific CMS page.
 
@@ -88,7 +88,7 @@ def get_page(params: Dict[str, Any], request) -> Dict[str, Any]:
         raise ValueError("page_id is required")
 
     try:
-        from cms.models import Page, Placeholder
+        from cms.models import Page
 
         page = Page.objects.get(pk=page_id)
         language = params.get("language")
@@ -128,7 +128,7 @@ def get_page(params: Dict[str, Any], request) -> Dict[str, Any]:
         raise Exception(f"Error getting page: {str(e)}")
 
 
-def create_page(params: Dict[str, Any], request) -> Dict[str, Any]:
+def create_page(params: dict[str, Any], request) -> dict[str, Any]:
     """
     Create a new CMS page.
 
@@ -180,7 +180,7 @@ def create_page(params: Dict[str, Any], request) -> Dict[str, Any]:
         raise Exception(f"Error creating page: {str(e)}")
 
 
-def get_all_pages(request) -> Dict[str, Any]:
+def get_all_pages(request) -> dict[str, Any]:
     """
     Get all pages as a resource.
 

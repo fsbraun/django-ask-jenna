@@ -23,7 +23,6 @@ PAGE_PROMTS: dict = {
                 Generate a JSON string for a meta description with an approximate length of {{ length }} characters for this page
                 optimizing search engine results in the language with the language code {{ instance.language|default:"en" }}""",
             "dynamic_content": lambda x: get_object_preview_url(x) if x else None,
-        }
+        },
     }
 }
-

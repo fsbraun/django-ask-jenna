@@ -1,4 +1,3 @@
-from mcp.types import Prompt, PromptMessage, Resource, TextContent
 import secrets
 
 from django.conf import settings

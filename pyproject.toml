@@ -139,6 +139,7 @@ DJANGO_SETTINGS_MODULE = "tests.settings"
 python_files = ["test_*.py", "*_test.py"]
 testpaths = ["tests"]
 addopts = "-ra"
+pythonpath = ["."]
 
 [tool.codespell]
 skip = "*.min.js,*.min.js.map,node_modules,build,dist,.git,package.json,package-lock.json"

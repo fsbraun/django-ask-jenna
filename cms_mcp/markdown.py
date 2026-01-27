@@ -62,7 +62,7 @@ class SemanticIndex:
 
     def _to_text(self, node: PageElement) -> str:
         if node.name == "a" and node.get("href", "#") != "#":
-            return f'[{node.get_text(separator=" ", strip=True)}]({node.get("href")})'
+            return f"[{node.get_text(separator=' ', strip=True)}]({node.get('href')})"
         return "".join(
             [
                 str(child)

@@ -8,7 +8,7 @@ from ..mcp_server import server
 from ..models import MCPResource
 
 
-@sync_to_async
+@sync_to_async(thread_sensitive=True)
 def _load_resources() -> list[MCPResource]:
     return list(
         MCPResource.objects.filter(enabled=True).only("name", "description", "uri")
@@ -28,7 +28,7 @@ async def list_resources() -> list[Resource]:
     ]
 
 
-@sync_to_async
+@sync_to_async(thread_sensitive=True)
 def _load_resource(uri: str) -> MCPResource:
     return MCPResource.objects.filter(uri=uri, enabled=True).only("content").first()
 

@@ -10,7 +10,7 @@ class CMSMCPConfig(CMSAppConfig):
             "title": {
                 "type": "string",
                 "maxLength": 255,
-                "description": "Provide a title for the new page.",
+                "description": "Provide a title for the new page. This title will appear in the browser title bar and menus.",
             },
             "slug": {
                 "type": "string",
@@ -20,7 +20,7 @@ class CMSMCPConfig(CMSAppConfig):
             "parent_page": {"type": "string"},
             "content": {
                 "type": "string",
-                "description": "Optional. Contains markdown content for the new page.",
+                "description": "Optional. Contains markdown content for the new page. Include headings, especially the page title if it should be shown on the page itself.",
             },
         },
         "required": ["title"],

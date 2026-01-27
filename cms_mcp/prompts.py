@@ -11,7 +11,7 @@ from .mcp_server import server
 from .models import MCPPrompt
 
 
-@sync_to_async
+@sync_to_async(thread_sensitive=True)
 def _load_prompts() -> list[MCPPrompt]:
     return list(MCPPrompt.objects.filter(enabled=True).only("name", "description"))
 
@@ -28,7 +28,7 @@ async def list_prompts() -> list[Prompt]:
     ]
 
 
-@sync_to_async
+@sync_to_async(thread_sensitive=True)
 def _load_prompt(name: str) -> MCPPrompt:
     return MCPPrompt.objects.filter(name=name, enabled=True).first()
 

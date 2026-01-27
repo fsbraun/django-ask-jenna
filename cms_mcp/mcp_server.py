@@ -14,3 +14,4 @@ content, configuration, project requirements, structure guidelines and style gui
 )
 
 server = Server(name=server_name, instructions=instructions)
+print("Started MCP  server")

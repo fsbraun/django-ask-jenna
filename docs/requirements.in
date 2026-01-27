@@ -1,0 +1,8 @@
+sphinx
+sphinx-rtd-theme
+sphinx-autodoc-typehints
+sphinx-copybutton
+sphinx-tabs
+furo
+pip-tools
+rinohtype

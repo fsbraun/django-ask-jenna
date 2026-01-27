@@ -291,7 +291,7 @@ This delta schema is designed to be:
 
 * **Small enough** for LLMs to learn reliably
 * **Rich enough** for real editorial workflows
-* **Safe** - No AST exposure or DOM manipulation by the LLM
+* **Safe** - No plugin exposure or DOM manipulation by the LLM
 * **Auditable** - Easy to validate, preview, and review changes
 
 .. note::

@@ -78,8 +78,9 @@ Delta Model
 
 How changes are expressed by AI agents.
 
-* The AI proposes changes as **deltas**: ordered lists of semantic operations.
-* Deltas are **intent descriptions**, not diffs or AST patches.
+* The AI proposes changes as **deltas**: ordered lists of semantic operations
+  (see :doc:`../reference/mcp-mutation-tools` for the full schema).
+* Deltas are **intent descriptions**, not diffs or plugin patches.
 * Replacement operations fully replace the targeted block. Inline markup (links, emphasis)
   is preserved **only if explicitly included** in the new Markdown.
 * Optional preview/dry-run tool can show what would change before applying.

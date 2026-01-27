@@ -24,6 +24,7 @@ Adds generative AI support to Django admin and Django CMS.
    how-to/dynamic-content
    how-to/mcp-server
    how-to/authentication
+   how-to/use-with-claude-desktop
 
 .. toctree::
    :maxdepth: 2

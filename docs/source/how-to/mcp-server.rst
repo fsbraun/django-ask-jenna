@@ -22,19 +22,6 @@ Run migrations:
 
    python manage.py migrate cms_mcp
 
-URL configuration
-=================
-
-Add the MCP endpoints to your URLconf:
-
-.. code-block:: python
-
-   from django.urls import path, include
-
-   urlpatterns = [
-       ...
-       path('mcp/', include('cms_mcp.urls')),
-   ]
 
 Configuration
 =============

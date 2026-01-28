@@ -53,7 +53,9 @@ class SemanticIndex:
             self._node_count += 1
             if node.name in self._tags:
                 self._add_to_index(node)
-            if node.name not in self._ignore:
+            if node.name not in self._ignore and not (
+                node.name == "div" and node.get("id") == "cms"
+            ):
                 for child in node.children:
                     if child.name:
                         _process_node(child)

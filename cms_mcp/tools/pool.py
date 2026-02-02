@@ -1,4 +1,5 @@
-from typing import Any, Callable
+from typing import Any
+from collections.abc import Callable
 
 from mcp import Tool
 from asgiref.sync import sync_to_async

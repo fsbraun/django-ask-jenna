@@ -216,9 +216,9 @@ def test_insert_before_adds_content_before_target():
     # New content should also appear before original in HTML
     new_html_pos = updated_html.find("fast, carbon-neutral delivery")
     orig_html_pos = updated_html.find("We offer fast delivery worldwide")
-    assert (
-        new_html_pos < orig_html_pos
-    ), "New content should appear before original text in HTML"
+    assert new_html_pos < orig_html_pos, (
+        "New content should appear before original text in HTML"
+    )
 
 
 def test_insert_after_adds_content_after_target():
@@ -250,9 +250,9 @@ def test_insert_after_adds_content_after_target():
     # New content should also appear after original in HTML
     new_html_pos = updated_html.find("Carbon offsets included")
     orig_html_pos = updated_html.find("We offer fast delivery worldwide")
-    assert (
-        new_html_pos > orig_html_pos
-    ), "New content should appear after original text in HTML"
+    assert new_html_pos > orig_html_pos, (
+        "New content should appear after original text in HTML"
+    )
 
 
 def test_find_target_with_matching_kind_and_text():
